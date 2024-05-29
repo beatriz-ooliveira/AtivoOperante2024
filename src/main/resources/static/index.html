@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../assets/style.css">
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" /> -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet" />
+  <title>Login</title>
+</head>
+
+<body>
+  <section class="primary">
+    <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 90%)">
+      <div class="container">
+        <div class="row gx-lg-5 align-items-center">
+          <div class="col-lg-6 mb-5 mb-lg-0">
+            <h1 class="my-5 display-3 fw-bold ls-tight">
+              Sistema Ativo e Operante<br />
+              <span class="text-primary" style="font-size: 45px;">Seja um cidadão atento aos problemas do dia a
+                dia.</span>
+            </h1>
+            <p style="color: hsl(217, 10%, 50.8%)">
+              É um sistema Web capaz de oferecer uma ferramenta ao cidadão
+              que deseja avisar ou denunciar aos orgãos competentes sobre
+              problemas na cidade, como buracos na rua, abandono de animais,
+              poda ou corte de árvores, problemas no trânsito, enfim qualquer
+              situação que pode afetar o dia a dia do cidadão.
+            </p>
+          </div>
+
+          <div class="col-lg-6 mb-5 mb-lg-0">
+            <div class="card">
+              <div class="card-body py-5 px-md-5">
+                <form>
+                  <h2 class="fw-bold mb-2" style="text-align: center;">Login</h2>
+                  <!-- Email input -->
+                  <div data-mdb-input-init class="form-outline mb-4">
+                    <input type="email" id="email" name="email" class="form-control" />
+                    <label class="form-label" for="email">User</label>
+                  </div>
+
+                  <!-- Password input -->
+                  <div data-mdb-input-init class="form-outline mb-4">
+                    <input type="password" id="senha" name="senha" class="form-control" />
+                    <label class="form-label" for="senha">Password</label>
+                  </div>
+                  <!-- Submit button -->
+                  <button type="submit" id="btn-login" 
+                    class="btn btn-primary btn-block mb-4">Entrar</button>
+
+                  <!-- Register buttons -->
+                  <div class="text-center">
+                    <p>Não tem cadastro? <a href="./create-user.html">Registre-se</a></p>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.umd.min.js"></script>
+<script src="./controller/login.js"></script>
+</html>

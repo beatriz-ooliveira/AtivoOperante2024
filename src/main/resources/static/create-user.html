@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/create-user.css">
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet" />
+  <title>Cadastro de Usuário</title>
+</head>
+
+<body>
+  <header class="header-page">
+    <h1>Sistema de Denúncias | Ativo e Operante</h1>
+  </header>
+  <section class="primary">
+    <div class="card">
+      <div class="card-body py-5 px-md-5">
+        <form id="formCadastroUsuario" onsubmit="cadastrarUsuario(event)">
+          <h2 class="fw-bold" style="text-align: center;">Cadastro de Usuário</h2>
+          <!-- CPF input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="text" id="cpf" name="cpf" class="form-control" required />
+            <label class="form-label" for="cpf">CPF</label>
+          </div>
+
+          <!-- Email input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="email" id="email" name="email" class="form-control" required />
+            <label class="form-label" for="email">Email</label>
+          </div>
+
+          <!-- Password input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="password" id="password" name="password" class="form-control" required />
+            <label class="form-label" for="password">Senha</label>
+          </div>
+
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-primary btn-block mb-4">
+            Cadastrar
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+  <script src="./controller/create-user.js"></script>
+</body>
+
+</html>

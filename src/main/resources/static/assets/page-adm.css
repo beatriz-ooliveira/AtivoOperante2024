@@ -1,0 +1,105 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
+.btn{
+    --mdb-btn-padding-x: 0.5rem !important;
+    --mdb-btn-padding-y: 0.5rem !important;
+    --mdb-btn-line-height: 0.5px !important;
+}
+.button-menu {
+    border: none;
+    
+}
+li{
+        background-color: #fff;
+    width: 49.7%;
+    padding: 8px;
+    text-align: center;
+    border-radius: inherit;
+}
+
+li a {
+    color: #6c6c6c;
+}
+.menu-horizontal {
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+    margin-top: -3%;
+    /* margin: 0; */
+    padding: 13px 160px;
+    width: 100%;
+    background-color: #949494ca; /* Cor de fundo da barra de menu */
+}
+
+.menu-horizontal .submenu {
+    display: inline-grid;
+    position: relative;
+    color: #ddd;
+}
+
+.menu-horizontal .submenu-itens {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    background-color: #ffffff; /* Cor de fundo dos submenus */
+    width: 100%;
+    padding: 6px;
+    /* margin-bottom: 25px; */
+    text-align: center;
+    /* margin-right: -12px; */
+    margin-top: 42px;
+}
+.menu-horizontal .submenu-itens li {
+    width: 100%;
+    padding: 0;
+}
+.menu-horizontal .submenu:hover .submenu-itens {
+    display: block;
+}
+
+.menu-horizontal .submenu-itens li {
+    display: block;
+}
+
+.menu-horizontal .submenu-itens li:hover {
+    background-color: #ddd; /* Cor de fundo ao passar o mouse sobre os itens do submenu */
+}
+
+
+.card {
+    width: 80%;
+    margin: auto;
+    margin-top: 4%;
+}
+
+.header-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#user {
+    font-size: small;
+    text-align: -webkit-right;
+    /* margin-right: auto !important; */
+    margin-top: 1%;
+    /* color: #fff !important; */
+    
+}
+
+h2 {
+    /* font-size: 20px; */
+    margin-top: 10px;
+    /* margin-bottom: 10px; */
+}
+
+.colored-toast {
+    background-color: #4CAF50; /* Cor de fundo para sucesso */
+    color: white; /* Cor do texto */
+}
+
+.colored-toast.error {
+    background-color: #f44336 !important; /* Cor de fundo para erro */
+    color: white; /* Cor do texto */
+}
