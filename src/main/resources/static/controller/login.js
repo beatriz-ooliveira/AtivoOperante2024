@@ -1,7 +1,7 @@
-const botao_login = document.getElementById("btn-login")
+// const botao_login = document.getElementById("btn-login")
 
-function login(event) {
-    event.preventDefault(); // Impede o envio do formulário padrão
+function login() {
+    // event.preventDefault(); // Impede o envio do formulário padrão
     const username = document.getElementById('email').value;
     const password = document.getElementById('senha').value;
 
@@ -62,5 +62,36 @@ function verificarPapelUsuario(token, email) {
     });
 }
 
-botao_login.addEventListener('click', login);
+document.addEventListener('DOMContentLoaded', function () {
+    // Adicionando evento de submissão ao formulário para validação
+    const form = document.getElementById('login');
+    form.addEventListener('submit', function (event) {
+    //   const email = document.getElementById('email');
+    //   const senha = document.getElementById('senha');
+      
+    //   // Validação personalizada para o email
+    //   if (email.value === '') {
+    //     email.setCustomValidity('Campo obrigatório.');
+    //     document.getElementById('emailFeedback').textContent = 'Campo obrigatório.';
+    //   } else if (!email.validity.valid) {
+    //     email.setCustomValidity('Formato inválido.');
+    //     document.getElementById('emailFeedback').textContent = 'Formato inválido.';
+    //   } else {
+    //     email.setCustomValidity('');
+    //   }
+  
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      } else {
+        event.preventDefault();
+        login(); // Chama a função de login
+      }
+  
+      form.classList.add('was-validated');
+    });
+  });
+  
+
+// botao_login.addEventListener('click', login);
 

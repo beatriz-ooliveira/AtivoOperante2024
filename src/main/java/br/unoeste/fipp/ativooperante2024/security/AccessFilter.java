@@ -20,7 +20,7 @@ public class AccessFilter implements Filter {
         String path = req.getRequestURI();
 
         // Permitir acesso anônimo ao endpoint de cadastro de usuário
-        if (path.equals("/apis/cidadao/cadastrar")) {
+        if (path.equals("/apis/cidadao/cadastrar") || path.equals("/apis/cidadao/listar-orgaos") ||path.equals("/apis/cidadao/listar-tipos")) {
             chain.doFilter(request, response);
         } else {
             if (token != null && JWTTokenProvider.verifyToken(token)) {

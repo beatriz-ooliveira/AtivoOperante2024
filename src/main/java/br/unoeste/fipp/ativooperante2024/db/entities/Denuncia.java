@@ -23,9 +23,6 @@ public class Denuncia {
     private int urgencia;
     @Column(name="den_data")
     private LocalDate data;
-    @Column(name="den_imagem")
-    private String imagem;
-
     @ManyToOne
     @JoinColumn(name="org_id",nullable = false)
     private Orgao orgao;
@@ -39,10 +36,15 @@ public class Denuncia {
     private Feedback feedback;
 
     public Denuncia() {
-        this("","",0,null,null,null,null,"");
+        this("","",0,null,null,null,null);
     }
 
-    public Denuncia(String titulo, String texto, int urgencia, LocalDate data, Orgao orgao, Tipo tipo, Usuario usuario,String imagem) {
+    public Denuncia(Long Id) {
+        this.Id = Id;
+    }
+
+
+    public Denuncia(String titulo, String texto, int urgencia, LocalDate data, Orgao orgao, Tipo tipo, Usuario usuario) {
         Id = proximoId++;
         this.titulo = titulo;
         this.texto = texto;
@@ -51,31 +53,10 @@ public class Denuncia {
         this.orgao = orgao;
         this.tipo = tipo;
         this.usuario = usuario;
-        this.imagem= imagem;
-    }
-
-    public Denuncia(Long id, String titulo, String descricao, int urgencia, LocalDate data, String orgaoNome, String tipoNome, String usuarioEmail, String imagemUrl) {
-        Id = proximoId++;
-        this.titulo = titulo;
-        this.texto = texto;
-        this.urgencia = urgencia;
-        this.data = data;
-        this.orgao = orgao;
-        this.tipo = tipo;
-        this.usuario = usuario;
-        this.imagem = imagemUrl != null ? "/imagens/" + imagemUrl : null; // Aqui está a linha corrigida
     }
 
     public Long getId() {
         return Id;
-    }
-
-    public String getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(String imagem) {
-        this.imagem = imagem;
     }
 
     public void setId(Long id) {

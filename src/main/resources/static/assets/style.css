@@ -93,3 +93,28 @@ a:hover {
 .minha-tabela tr:hover {
     background-color: #f5f5f5;
 }
+
+.colored-toast, .swal2-icon-success {
+    background-color: #a5dc86 !important; /* Cor de fundo para sucesso */
+}
+
+.colored-toast.error, .swal2-icon-error {
+    background-color: #f27474 !important; /* Cor de fundo para erro */
+}
+
+.swal2-icon-info {
+    background-color: #3fc3ee !important; /* Cor de fundo para erro */
+}
+/* swal2-popup.swal2-toast {
+    class="swal2-popup swal2-toast swal2-icon-info swal2-show" */
+    .swal2-html-container, .swal2-close,.swal2-popup.swal2-toast, .swal2-icon-content {
+        color: white;
+      }
+
+      .swal2-icon.swal2-info.swal2-icon-show,.swal2-error,
+      .swal2-success, .swal2-success-ring,.swal2-success-circular-line-left, .swal2-success-circular-line-right,
+      .swal2-success-fix, .swal2-success-ring, .swal2-success-line-long, .swal2-success-line-tip {
+        color: white !important;
+        border-color: white !important;
+      }
+      

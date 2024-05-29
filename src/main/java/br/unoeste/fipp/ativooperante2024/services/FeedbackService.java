@@ -16,6 +16,10 @@ public class FeedbackService {
         this.feedbackRepository = feedbackRepository;
     }
 
+
+    public void excluirFeedback(Long id) {
+        feedbackRepository.deleteById(id);
+    }
     public Feedback salvarFeedback(String texto, Denuncia denuncia) {
         Feedback feedback = new Feedback(texto, denuncia);
         return feedbackRepository.save(feedback);

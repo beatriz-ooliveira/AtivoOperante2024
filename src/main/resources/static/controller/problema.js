@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', function () {
     window.abrirModalCadastrarProblema = function () {
         const myModal = new bootstrap.Modal(document.getElementById('modalCadastrarProblema'));
@@ -12,38 +10,48 @@ document.addEventListener('DOMContentLoaded', function () {
         myModal.show();
     };
 
+    const form = document.getElementById('formCadastrarOrgao');
+    form.addEventListener('submit', function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      } else {
+        event.preventDefault();
+        cadastrarTipo(); // Chama a função para cadastrar órgão
+      }
+      form.classList.add('was-validated');
+    });
+
     // Função para buscar dados do servidor e preencher as tabelas de problemas
     function fetchProblemas() {
-        var token = localStorage.getItem("authToken");
-        fetch('http://localhost:8080/apis/adm/listar-tipos', {
+        fetch('http://localhost:8080/apis/adm/listar-problemas', {
             method: 'GET',
             headers: {
                 'Authorization': token
             }
         })
-        .then(response => response.json())
-        .then(data => {
-
-            const tabelaProblemas = document.getElementById('tabelaProblemas');
-            tabelaProblemas.innerHTML = '';
-            data.forEach(problema => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${problema.id}</td>
+            .then(response => response.json())
+            .then(data => {
+                const tabelaProblemas = document.getElementById('tabelaProblemas');
+                tabelaProblemas.innerHTML = '';
+                data.forEach(problema => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${problema.id}</td>
                     <td><span id="nomeProblema${problema.id}">${problema.nome}</span></td>
                     <td style="padding: 15px 45px;text-align: center;">
                     <button class="btn btn-primary" onclick="editarProblema(${problema.id})"><span class="material-symbols-outlined">edit</span></button>
                     <button class="btn btn-danger" onclick="excluirProblema(${problema.id})"><span class="material-symbols-outlined">delete</span></button>
                     </td>`;
-                tabelaProblemas.appendChild(row);
+                    tabelaProblemas.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao buscar problemas:', error);
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Erro ao buscar problemas.'
+                });
             });
-        })
-        .catch(error => {
-            console.error('Erro ao buscar problemas:', error);
-            Toast.fire({
-                icon: 'error',
-                title: 'Erro ao buscar problemas.'
-            });
-        });
     }
 
     // Função para editar um problema
@@ -69,48 +77,87 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Função para salvar a edição de um problema
     window.salvarEdicaoProblema = function (problemaId) {
-        const novoNome = document.getElementById(`inputNomeProblema${problemaId}`).value;
-        fetch(`http://localhost:8080/apis/adm/add-problema?id=${problemaId}&nome=${novoNome}`, {
-            method: 'POST',
+        const novoNome = document.getElementById(`inputNomeProblema${problemaId}`).value.toUpperCase();
+        fetch(`http://localhost:8080/apis/adm/editar-problema`, {
+            method: 'PUT',
             headers: {
-                'Authorization': `Bearer ${token}`
-            }
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify({ id: problemaId, nome: novoNome })
         })
-        .then(response => {
-            if (response.ok) {
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Problema atualizado com sucesso!'
-                });
-                fetchProblemas(); // Atualiza a lista de problemas após a edição
-            } else {
+            .then(response => {
+                if (response.ok) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Problema atualizado com sucesso!'
+                    });
+                    fetchProblemas(); // Atualiza a lista de problemas após a edição
+                } else {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Erro ao atualizar problema.'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar problema:', error);
                 Toast.fire({
                     icon: 'error',
                     title: 'Erro ao atualizar problema.'
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao atualizar problema:', error);
-            Toast.fire({
-                icon: 'error',
-                title: 'Erro ao atualizar problema.'
             });
-        });
     };
 
-    // Função para manipular o formulário de cadastro de problema
-    document.getElementById('formCadastrarProblema').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const nomeProblema = document.getElementById('nomeProblema').value;
-        fetch('http://localhost:8080/apis/adm/add-tipo', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ nome: nomeProblema })
-        })
+    
+
+    // Função para excluir um problema
+    window.excluirProblema = function (problemaId) {
+        Swal.fire({
+            title: "Deseja realmente excluir este tipo de problema?",
+            text: "Ao excluir a denúncia todos os dados serão perdidos!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sim, excluir!"
+          }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`http://localhost:8080/apis/adm/excluir-problema?id=${problemaId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': token
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Problema excluído com sucesso!'
+                        });
+                        fetchProblemas(); // Atualiza a lista de problemas após a exclusão
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Erro ao excluir problema.'
+                        });
+                    }
+                })
+        }
+    })
+    };
+});
+// Função para manipular o formulário de cadastro de problema
+function cadastrarTipo() {
+    const nomeProblema = document.getElementById('nomeProblema').value.toUpperCase();
+    fetch('http://localhost:8080/apis/adm/add-tipo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify({ nome: nomeProblema })
+    })
         .then(response => {
             if (response.ok) {
                 Toast.fire({
@@ -132,38 +179,4 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: 'Erro ao cadastrar problema.'
             });
         });
-    });
-
-    // Função para excluir um problema
-    window.excluirProblema = function (problemaId) {
-        if (confirm('Deseja realmente excluir este tipo de problema?')) {
-            fetch(`http://localhost:8080/apis/adm/delete-problema?id=${problemaId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Problema excluído com sucesso!'
-                    });
-                    fetchProblemas(); // Atualiza a lista de problemas após a exclusão
-                } else {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Erro ao excluir problema.'
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao excluir problema:', error);
-                Toast.fire({
-                    icon: 'error',
-                    title: 'Erro ao excluir problema.'
-                });
-            });
-        }
-    };
-});
+}

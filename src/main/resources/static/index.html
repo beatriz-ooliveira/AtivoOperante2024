@@ -35,28 +35,37 @@
           <div class="col-lg-6 mb-5 mb-lg-0">
             <div class="card">
               <div class="card-body py-5 px-md-5">
-                <form>
+                <form id="login" class="needs-validation" novalidate>
                   <h2 class="fw-bold mb-2" style="text-align: center;">Login</h2>
                   <!-- Email input -->
                   <div data-mdb-input-init class="form-outline mb-4">
-                    <input type="email" id="email" name="email" class="form-control" />
+                    <input type="email" id="email" name="email" class="form-control" required />
                     <label class="form-label" for="email">User</label>
+                    <div class="invalid-feedback" id="emailFeedback">
+                      Campo obrigatório.
+                    </div>
                   </div>
-
+                
                   <!-- Password input -->
                   <div data-mdb-input-init class="form-outline mb-4">
-                    <input type="password" id="senha" name="senha" class="form-control" />
+                    <input type="password" id="senha" name="senha" class="form-control" required />
                     <label class="form-label" for="senha">Password</label>
+                    <div class="invalid-feedback">
+                      Campo obrigatório.
+                    </div>
                   </div>
                   <!-- Submit button -->
-                  <button type="submit" id="btn-login" 
-                    class="btn btn-primary btn-block mb-4">Entrar</button>
-
+                  <button type="submit" id="btn-login" class="btn btn-primary btn-block mb-4">Entrar</button>
+                
                   <!-- Register buttons -->
                   <div class="text-center">
                     <p>Não tem cadastro? <a href="./create-user.html">Registre-se</a></p>
                   </div>
                 </form>
+                
+                
+             
+                
               </div>
             </div>
           </div>

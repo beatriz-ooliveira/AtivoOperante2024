@@ -11,15 +11,39 @@ window.darFeedbackDenuncia = function (id) {
         headers: {
             'Authorization': token
         }
-    }).then(response => response.json())
-        .then(data => {
-            if (data) {
-                document.getElementById('feedbackDenuncia').value = data.texto;
-                document.getElementById('feedbackDenuncia').disabled = true;
-                document.getElementById('btnEnviarFeedback').disabled = true;
+    })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('Feedback não encontrado');
+                }
+                throw new Error('Erro ao obter feedback');
             }
+            return response.json();
         })
-        .catch(error => console.error('Erro ao obter feedback:', error));
+        .then(data => {
+            document.getElementById('feedbackDenuncia').value = data.texto;
+            document.getElementById('feedbackDenuncia').disabled = true;
+            document.getElementById('btnEnviarFeedback').disabled = true;
+        })
+        .catch(error => {
+            if (error.message === 'Feedback não encontrado') {
+                document.getElementById('feedbackDenuncia').value = '';
+                document.getElementById('feedbackDenuncia').disabled = false;
+                document.getElementById('btnEnviarFeedback').disabled = false;
+                Toast.fire({
+                    icon: 'info',
+                    title: 'Nenhum feedback encontrado. Você pode adicionar um.'
+                });
+            } else {
+                console.error('Erro ao obter feedback:', error);
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Erro ao obter feedback.'
+                });
+                feedbackModal.hide();
+            }
+        });
 
     document.getElementById('btnEnviarFeedback').addEventListener('click', function () {
         const feedback = document.getElementById('feedbackDenuncia').value;
@@ -34,30 +58,31 @@ window.darFeedbackDenuncia = function (id) {
         fetch(`http://localhost:8080/apis/adm/feedback/denuncia/${id}?texto=${feedback}`, {
             method: 'POST',
             headers: {
-                'Authorization': token
-            }
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ texto: feedback })
         })
-        .then(response => {
-            if (response.ok) {
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Feedback enviado com sucesso!'
-                });
-                feedbackModal.hide();
-            } else {
+            .then(response => {
+                if (response.ok) {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Feedback enviado com sucesso!'
+                    });
+                    feedbackModal.hide();
+                } else {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Erro ao enviar feedback.'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao enviar feedback:', error);
                 Toast.fire({
                     icon: 'error',
                     title: 'Erro ao enviar feedback.'
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao enviar feedback:', error);
-            Toast.fire({
-                icon: 'error',
-                title: 'Erro ao enviar feedback.'
             });
-        });
     });
 };
-

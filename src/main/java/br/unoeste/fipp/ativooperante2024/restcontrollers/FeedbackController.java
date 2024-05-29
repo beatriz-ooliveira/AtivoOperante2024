@@ -4,6 +4,8 @@ import br.unoeste.fipp.ativooperante2024.db.entities.Denuncia;
 import br.unoeste.fipp.ativooperante2024.db.entities.Feedback;
 import br.unoeste.fipp.ativooperante2024.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +31,14 @@ public class FeedbackController {
 
     @GetMapping("/denuncia/{denunciaId}")
     @ResponseBody
-    public FeedbackDTO buscarFeedbackPorDenuncia(@PathVariable Denuncia denunciaId) {
+    public ResponseEntity<FeedbackDTO> buscarFeedbackPorDenuncia(@PathVariable Denuncia denunciaId) {
         Feedback feedback = feedbackService.buscarFeedbackPorDenuncia(denunciaId);
+        if (feedback == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
         FeedbackDTO feedbackDTO = new FeedbackDTO();
         feedbackDTO.setTexto(feedback.getTexto());
         // Outros mapeamentos conforme necessário
-        return feedbackDTO;
+        return new ResponseEntity<>(feedbackDTO, HttpStatus.OK);
     }
 }

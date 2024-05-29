@@ -93,13 +93,3 @@ h2 {
     margin-top: 10px;
     /* margin-bottom: 10px; */
 }
-
-.colored-toast {
-    background-color: #4CAF50; /* Cor de fundo para sucesso */
-    color: white; /* Cor do texto */
-}
-
-.colored-toast.error {
-    background-color: #f44336 !important; /* Cor de fundo para erro */
-    color: white; /* Cor do texto */
-}

@@ -1,12 +1,11 @@
 package br.unoeste.fipp.ativooperante2024.restcontrollers;
 
 import br.unoeste.fipp.ativooperante2024.db.entities.Denuncia;
+import br.unoeste.fipp.ativooperante2024.db.entities.Feedback;
 import br.unoeste.fipp.ativooperante2024.db.entities.Orgao;
 import br.unoeste.fipp.ativooperante2024.db.entities.Tipo;
-import br.unoeste.fipp.ativooperante2024.db.entities.Usuario;
-import br.unoeste.fipp.ativooperante2024.db.repositories.DenunciaRepository;
-import br.unoeste.fipp.ativooperante2024.db.repositories.UsuarioRepository;
 import br.unoeste.fipp.ativooperante2024.services.DenunciaService;
+import br.unoeste.fipp.ativooperante2024.services.FeedbackService;
 import br.unoeste.fipp.ativooperante2024.services.OrgaoService;
 import br.unoeste.fipp.ativooperante2024.services.TipoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("apis/adm/")
@@ -31,17 +29,14 @@ public class AdminRestController {
     private TipoService tipoService;
 
     @Autowired
-    UsuarioRepository usuRepo;
-
-    @Autowired
-    private DenunciaRepository denunciaRepo;
+    private FeedbackService feedbackService;
 
     @GetMapping("teste-conexao")
     public String testeConexao() {
         return "conectado";
     }
 
-    @GetMapping("/delete-orgao")
+    @DeleteMapping("/delete-orgao")
     public ResponseEntity<Object> excluirOrgao(@RequestParam(value = "id") Long id) {
         if (orgaoService.delete(id))
             return new ResponseEntity<>("", HttpStatus.OK);
@@ -55,17 +50,37 @@ public class AdminRestController {
         return new ResponseEntity<>(novo, HttpStatus.OK);
     }
 
+    @PutMapping("/alterar-orgao")
+    public ResponseEntity<Object> alterarOrgao(@RequestBody Orgao orgao) {
+        Orgao orgaoAtualizado = orgaoService.save(orgao);
+        return new ResponseEntity<>(orgaoAtualizado, HttpStatus.OK);
+    }
+
     @PostMapping("/add-tipo")
     public ResponseEntity<Object> salvarTipo(@RequestBody Tipo tipo) {
         Tipo novo = tipoService.save(tipo);
         return new ResponseEntity<>(novo, HttpStatus.OK);
     }
 
-    @GetMapping("/listar-tipos")
-    public ResponseEntity<Object> listarTipo() {
-        return new ResponseEntity<>(tipoService.getAll(), HttpStatus.OK);
+    @GetMapping("/listar-problemas")
+    public ResponseEntity<List<Tipo>> listarProblemas() {
+        List<Tipo> tipos = tipoService.getAll();
+        return new ResponseEntity<>(tipos, HttpStatus.OK);
     }
 
+    @DeleteMapping("/excluir-problema")
+    public ResponseEntity<Object> excluirProblema(@RequestParam(value = "id") Long id) {
+        if (tipoService.delete(id))
+            return new ResponseEntity<>("Problema excluído com sucesso.", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Erro ao excluir o problema.", HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/editar-problema")
+    public ResponseEntity<Object> editarProblema(@RequestBody Tipo tipo) {
+        Tipo tipoAtualizado = tipoService.save(tipo);
+        return new ResponseEntity<>(tipoAtualizado, HttpStatus.OK);
+    }
 
     @GetMapping("/get-orgao")
     public ResponseEntity<Object> buscarUmOrgao(@RequestParam(value = "id") Long id) {
@@ -81,72 +96,13 @@ public class AdminRestController {
     @GetMapping("/get-denuncia")
     public ResponseEntity<Object> buscarUmaDenuncia(@RequestParam(value = "id") Long id) {
         Denuncia denuncia = denunciaService.getById(id);
-        if (denuncia != null) {
-            DenunciaResponse denunciaResponse = new DenunciaResponse(
-                    denuncia.getId(),
-                    denuncia.getTitulo(),
-                    denuncia.getTexto(),
-                    denuncia.getUrgencia(),
-                    denuncia.getData(),
-                    denuncia.getOrgao().getNome(),
-                    denuncia.getTipo().getNome(),
-                    denuncia.getUsuario().getEmail(),
-                    denuncia.getImagem()
-            );
-            return ResponseEntity.ok(denunciaResponse);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return new ResponseEntity<>(denuncia, HttpStatus.OK);
     }
-
 
     @GetMapping("/get-all-denuncias")
-    public ResponseEntity<Object> getAllDenuncias() {
+    public ResponseEntity<List<Denuncia>> getAllDenuncias() {
         List<Denuncia> denuncias = denunciaService.getAll();
-        if (!denuncias.isEmpty()) {
-            List<DenunciaResponse> denunciaResponses = denuncias.stream()
-                    .map(denuncia -> new DenunciaResponse(
-                            denuncia.getId(),
-                            denuncia.getTitulo(),
-                            denuncia.getTexto(),
-                            denuncia.getUrgencia(),
-                            denuncia.getData(),
-                            denuncia.getOrgao().getNome(),
-                            denuncia.getTipo().getNome(),
-                            denuncia.getUsuario().getEmail(),
-                            denuncia.getImagem()
-                    ))
-                    .collect(Collectors.toList());
-            return ResponseEntity.ok(denunciaResponses);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-
-    @GetMapping("/listar-minhas-denuncias")
-    public ResponseEntity<Object> listarMinhasDenuncias(@RequestParam(value = "userEmail") String userEmail) {
-        Usuario usuario = usuRepo.findByEmail(userEmail);
-
-        if (usuario != null) {
-            List<Denuncia> denuncias = denunciaRepo.findAllByUsuario(usuario);
-            List<DenunciaResponse> denunciaResponses = denuncias.stream()
-                    .map(denuncia -> new DenunciaResponse(
-                            denuncia.getId(),
-                            denuncia.getTitulo(),
-                            denuncia.getTexto(),
-                            denuncia.getUrgencia(),
-                            denuncia.getData(),
-                            denuncia.getOrgao().getNome(),
-                            denuncia.getTipo().getNome(),
-                            denuncia.getUsuario().getEmail(),
-                            denuncia.getImagem()
-                    ))
-                    .collect(Collectors.toList());
-            return ResponseEntity.ok(denunciaResponses);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(denuncias);
     }
 
     @PutMapping("/editar-denuncia")
@@ -157,11 +113,23 @@ public class AdminRestController {
 
     @DeleteMapping("/delete-denuncia")
     public ResponseEntity<Object> excluirDenuncia(@RequestParam(value = "id") Long id) {
-        if (denunciaService.delete(id)) {
-            return new ResponseEntity<>("Denúncia excluída com sucesso.", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Erro ao excluir a denúncia.", HttpStatus.BAD_REQUEST);
+        try {
+            // Verificar se existe feedback associado
+            Feedback feedback = feedbackService.buscarFeedbackPorDenuncia(new Denuncia(id));
+            if (feedback != null) {
+                // Excluir feedback
+                feedbackService.excluirFeedback(feedback.getId());
+            }
+            // Excluir denúncia
+            if (denunciaService.delete(id)) {
+                return new ResponseEntity<>("Denúncia excluída com sucesso.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Erro ao excluir a denúncia.", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Erro ao processar a exclusão.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 }
